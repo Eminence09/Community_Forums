@@ -68,6 +68,16 @@ TEMPLATES = [
     },
 ]
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "developer_forum",
+        "USER": "postgres",
+        "PASSWORD": "",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+}
 WSGI_APPLICATION = 'Community_Forum_Project.wsgi.application'
 
 
