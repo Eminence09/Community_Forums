@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: #f3f4f6;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      width: min(420px, 90vw);
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+    }
+    h2 { margin-top: 0; }
+    form { display: flex; flex-direction: column; gap: 14px; }
+    input {
+      width: 100%;
+      background: #0f172a;
+      color: white;
+      border: 1px solid #475569;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .auth-links {
+      margin-top: 16px;
+      text-align: center;
+    }
+    .auth-links a { color: #93c5fd; text-decoration: none; }
+    .messages { margin-bottom: 16px; }
+    .messages .success { color: #86efac; }
+    .messages .info { color: #93c5fd; }
+    .errorlist { color: #fca5a5; list-style: none; padding: 0; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Login</h2>
+
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {{ form.username }}
+      {{ form.password }}
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="auth-links">
+      <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+    </div>
+  </div>
+</body>
+</html>

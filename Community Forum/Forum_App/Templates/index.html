@@ -617,6 +617,13 @@
         <a href="#">ISSUES</a>
       </nav>
       <div class="header-tools">
+        {% if user.is_authenticated %}
+          <span style="color:#d1fae5; font-weight:600;">{{ user.username }}</span>
+          <a href="{% url 'logout' %}" style="color:#fca5a5; text-decoration:none;">Logout</a>
+        {% else %}
+          <a href="{% url 'login' %}" style="color:#bfdbfe; text-decoration:none;">Login</a>
+          <a href="{% url 'signup' %}" style="color:#bbf7d0; text-decoration:none;">Sign up</a>
+        {% endif %}
         <button class="search-btn" aria-label="Search"></button>
         <button class="hamburger" aria-label="Menu">
           <i></i><i></i><i></i>

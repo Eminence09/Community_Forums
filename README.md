@@ -9,3 +9,8 @@ email: yashbanait05@gmail.com
 password: yash's community
 
 
+
+postgresql credentials:
+
+DB_USER=postgres
+DB_PASSWORD="yashscommunity"
