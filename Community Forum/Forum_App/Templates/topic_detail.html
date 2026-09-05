@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ topic.topic_names }} | Django Forum</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #202020;
+        color: #d1d1d1;
+      }
+      .top-header {
+        height: 55px;
+        background: #0b3828;
+        border-bottom: 1px solid #163c2e;
+      }
+      .header-inner {
+        max-width: 1090px;
+        height: 55px;
+        margin: auto;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+      }
+      .django-logo {
+        color: #f2f2f2;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -1.5px;
+        margin-right: auto;
+      }
+      .main-nav {
+        display: flex;
+        gap: 23px;
+        align-items: center;
+      }
+      .main-nav a,
+      .account a {
+        color: #d9ddd9;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .main-nav a:hover,
+      .account a:hover {
+        color: #fff;
+      }
+      .account {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-left: 35px;
+      }
+      .user-name {
+        color: #d1fae5;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .page {
+        max-width: 1090px;
+        margin: auto;
+        padding: 7px 0 80px;
+      }
+      .topic-head {
+        border-bottom: 1px solid #303030;
+        padding: 0 60px 17px;
+      }
+      .back {
+        color: #1398cf;
+        text-decoration: none;
+        font-size: 14px;
+      }
+      h1 {
+        color: #dfe2e2;
+        font-size: 30px;
+        line-height: 1.2;
+        margin: 8px 0 7px;
+      }
+      .category {
+        color: #aeb3b3;
+        font-size: 14px;
+      }
+      .conversation {
+        max-width: 800px;
+        padding: 0 60px;
+      }
+      .post {
+        border-bottom: 1px solid #333;
+        padding: 17px 0 25px;
+      }
+      .post-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #c7caca;
+        font-weight: 700;
+        font-size: 16px;
+      }
+      .avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 3px;
+        display: grid;
+        place-items: center;
+        background: #aeb3b1;
+        color: #303332;
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .post-date {
+        margin-left: auto;
+        color: #898e8e;
+        font-size: 13px;
+        font-weight: 400;
+      }
+      .post-body {
+        color: #e0e1e0;
+        font-size: 16px;
+        line-height: 1.55;
+        margin: 20px 0 18px 50px;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .post-actions {
+        margin-left: 50px;
+        color: #838989;
+        font-size: 14px;
+      }
+      .reply-heading {
+        color: #aeb3b3;
+        font-size: 17px;
+        margin: 25px 0 12px;
+      }
+      .reply {
+        border-top: 1px solid #303030;
+        padding: 15px 0;
+      }
+      .reply .post-body {
+        margin-top: 12px;
+        margin-bottom: 0;
+      }
+      .reply-form {
+        margin-top: 25px;
+        border: 1px solid #414545;
+        background: #242525;
+        padding: 16px;
+      }
+      .reply-form label {
+        display: block;
+        color: #c7caca;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .reply-form textarea {
+        width: 100%;
+        min-height: 105px;
+        resize: vertical;
+        border: 1px solid #555b5a;
+        border-radius: 4px;
+        background: #202020;
+        color: #e7e7e7;
+        padding: 12px;
+        font: inherit;
+        outline: none;
+      }
+      .reply-form textarea:focus {
+        border-color: #159fd3;
+      }
+      .reply-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 12px;
+      }
+      .reply-button {
+        border: 0;
+        border-radius: 4px;
+        background: #078fc7;
+        color: #102027;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 10px 17px;
+      }
+      .reply-button:hover {
+        background: #0b9bd5;
+      }
+      .empty-replies {
+        color: #8f9694;
+        font-size: 14px;
+      }
+      @media (max-width: 800px) {
+        .main-nav {
+          display: none;
+        }
+        .account {
+          margin-left: auto;
+        }
+        .topic-head,
+        .conversation {
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+      }
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 24px;
+        }
+        .post-body,
+        .post-actions {
+          margin-left: 0;
+        }
+        .post-date {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="top-header">
+      <div class="header-inner">
+        <div class="django-logo">django</div>
+        <nav class="main-nav">
+          <a href="#">PROJECT HOMEPAGE</a><a href="#">DOWNLOAD</a
+          ><a href="#">DOCUMENTATION</a><a href="#">CODE</a
+          ><a href="#">ISSUES</a>
+        </nav>
+        <div class="account">
+          <span class="user-name">{{ user.username }}</span
+          ><a href="{% url 'logout' %}">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="topic-head">
+        <a class="back" href="{% url 'new_announcements' %}"
+          >&lt; New Announcements</a
+        >
+        <h1>{{ topic.topic_names }}</h1>
+        <div class="category">Announcements</div>
+      </section>
+
+      <section class="conversation" aria-label="Forum conversation">
+        <article class="post">
+          <div class="post-meta">
+            <div class="avatar">
+              {{ topic.username|default:"?"|first|upper }}
+            </div>
+            <span>{{ topic.username|default:"Unknown user" }}</span>
+            <span class="post-date">Original post</span>
+          </div>
+          <p class="post-body">
+            {{ topic.topic_description|default:"No post content was added." }}
+          </p>
+          <div class="post-actions">Public forum post</div>
+        </article>
+
+        <h2 class="reply-heading">Replies</h2>
+        {% for reply in replies %}
+        <article class="reply">
+          <div class="post-meta">
+            <div class="avatar">
+              {{ reply.username|default:"?"|first|upper }}
+            </div>
+            <span>{{ reply.username|default:"Unknown user" }}</span>
+            <span class="post-date">Community reply</span>
+          </div>
+          <p class="post-body">{{ reply.body }}</p>
+        </article>
+        {% empty %}
+        <p class="empty-replies">
+          No replies yet. Be the first to join the discussion.
+        </p>
+        {% endfor %}
+
+        <form class="reply-form" method="post">
+          {% csrf_token %}
+          <label for="body">Reply to this forum</label>
+          <textarea
+            id="body"
+            name="body"
+            maxlength="5000"
+            required
+            placeholder="Write a public reply..."
+          ></textarea>
+          <div class="reply-actions">
+            <button class="reply-button" type="submit">Post Reply</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

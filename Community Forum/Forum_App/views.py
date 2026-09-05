@@ -2,10 +2,10 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import SignUpForm
-from .models import topic_info
+from .models import TopicReply, topic_info
 
 
 def signup_view(request):
@@ -68,3 +68,29 @@ def first_page(request):
     topics = topic_info.objects.order_by('-id')
     return render(request, 'index.html', {'topics': topics, 'user': request.user})
 
+
+@login_required(login_url='login')
+def new_announcements(request):
+    topics = topic_info.objects.order_by('-id')
+    return render(request, 'new_announcements.html', {'topics': topics, 'user': request.user})
+
+
+@login_required(login_url='login')
+def topic_detail(request, topic_id):
+    topic = get_object_or_404(topic_info, id=topic_id)
+
+    if request.method == 'POST':
+        reply_body = (request.POST.get('body') or '').strip()
+        if reply_body:
+            TopicReply.objects.create(
+                topic=topic,
+                username=request.user.username,
+                body=reply_body,
+            )
+        return redirect('topic_detail', topic_id=topic.id)
+
+    return render(request, 'topic_detail.html', {
+        'topic': topic,
+        'replies': topic.replies.all(),
+        'user': request.user,
+    })

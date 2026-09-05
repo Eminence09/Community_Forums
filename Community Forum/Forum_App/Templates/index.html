@@ -641,7 +641,7 @@
       <div class="tabs">
         <a class="active" href="#">Categories</a>
         <a href="#">Latest</a>
-        <a href="#">New (2)</a>
+        <a href="{% url 'new_announcements' %}">New ({{ topics|length }})</a>
         <a href="#">Top</a>
       </div>
       <button class="new-topic" id="openTopic">&nbsp; New Topic</button>
@@ -664,6 +664,12 @@
       </div>
       <div class="topic-count"><strong>2</strong> / month</div>
       <div class="latest">
+        {% for topic in topics|slice:":1" %}
+        <div>
+          <a href="{% url 'topic_detail' topic.id %}">{{ topic.topic_names }}</a>
+          <small>New</small>
+        </div>
+        {% endfor %}
         <div>
           <a href="#">Welcome to the Django forum!</a> <small>Sep 2019</small>
         </div>
@@ -761,7 +767,7 @@
     <section class="category-row" style="display:block; margin-top: 20px; padding: 20px;">
       <h2 style="margin-top: 0; color: #c4c7c7;">Latest Topics</h2>
       <ul style="margin: 0; padding-left: 18px; color: #e6e6e6; line-height: 1.8;">
-        {% for topic in topic_info %}
+        {% for topic in topics %}
         <li>{{ topic.topic_names }} - {{ topic.topic_description }}</li>
         {% empty %}
         <li>No topics created yet.</li>
