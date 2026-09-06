@@ -1,833 +1,883 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Django Forum Clone</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #202020;
+        color: #d1d1d1;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .top-header {
+        height: 65px;
+        background: #0b3828;
+        border-bottom: 1px solid #163c2e;
+      }
+
+      .header-inner {
+        height: 65px;
+        max-width: 1400px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        padding: 0 18px;
+      }
+
+      .django-logo {
+        font-size: 30px;
+        line-height: 1;
+        color: #f2f2f2;
+        font-weight: 700;
+        letter-spacing: -1.7px;
+        margin-right: auto;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Django Forum Clone</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      min-height: 100%;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #202020;
-      color: #d1d1d1;
-    }
-
-    body {
-      overflow-x: hidden;
-    }
-
-    .top-header {
-      height: 65px;
-      background: #0b3828;
-      border-bottom: 1px solid #163c2e;
-    }
-
-    .header-inner {
-      height: 65px;
-      max-width: 1400px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      padding: 0 18px;
-    }
-
-    .django-logo {
-      font-size: 30px;
-      line-height: 1;
-      color: #f2f2f2;
-      font-weight: 700;
-      letter-spacing: -1.7px;
-      margin-right: auto;
-    }
-
-    .main-nav {
-      display: flex;
-      gap: 25px;
-      align-items: center;
-    }
-
-    .main-nav a {
-      font-size: 15px;
-      font-weight: 700;
-      color: #d9ddd9;
-      text-decoration: none;
-    }
-
-    .main-nav a:hover {
-      color: #fff;
-    }
-
-    .header-tools {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-      margin-left: 48px;
-    }
-
-    .search-btn {
-      width: 27px;
-      height: 27px;
-      border: 4px solid #8a918e;
-      border-radius: 50%;
-      background: transparent;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .search-btn:after {
-      content: "";
-      position: absolute;
-      width: 12px;
-      height: 4px;
-      background: #8a918e;
-      right: -10px;
-      bottom: -6px;
-      transform: rotate(47deg);
-    }
-
-    .hamburger {
-      width: 28px;
-      background: none;
-      border: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-    }
-
-    .hamburger i {
-      height: 4px;
-      background: #888f8b;
-      border-radius: 3px;
-      width: 25px;
-    }
-
-    .user-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #f1f3ed;
-      border: 2px solid #b5e6be;
-      display: grid;
-      place-items: center;
-      color: #62cb77;
-      font-size: 28px;
-      font-weight: 300;
-    }
-
-    .forum-page {
-      max-width: 1400px;
-      margin: auto;
-      padding: 20px 5px 100px;
-    }
-
-    .toolbar {
-      height: 65px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .filter-buttons {
-      display: flex;
-      gap: 10px;
-      margin-right: 10px;
-    }
-
-    .filter-buttons button {
-      height: 43px;
-      background: #202020;
-      border: 1px solid #585858;
-      color: #ddd;
-      border-radius: 5px;
-      font-size: 16px;
-      padding: 0 10px;
-    }
-
-    .filter-buttons b {
-      font-size: 30px;
-      line-height: 0;
-      vertical-align: -3px;
-      margin-left: 7px;
-      color: #aaa;
-      font-weight: 400;
-    }
-
-    .tabs {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-
-    .tabs a {
-      color: #eee;
-      text-decoration: none;
-      font-size: 18px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      padding: 0 3px;
-      border-bottom: 2px solid transparent;
-    }
-
-    .tabs a.active {
-      color: #0096d6;
-      border-bottom-color: #0096d6;
-    }
-
-    .new-topic {
-      margin-left: auto;
-      background: #0788bd;
-      border: 0;
-      color: #111d22;
-      border-radius: 5px;
-      font-size: 18px;
-      padding: 10px 16px;
-      cursor: pointer;
-    }
-
-    .new-topic:hover {
-      background: #0b9bd5;
-    }
-
-    .table-head {
-      display: grid;
-      grid-template-columns: 1fr 65px 1.1fr;
-      border-bottom: 1px solid #303030;
-      padding: 0 17px 12px;
-      color: #ddd;
-      font-size: 15px;
-    }
-
-    .table-head span:nth-child(2),
-    .table-head span:nth-child(3) {
-      text-align: left;
-    }
-
-    .category-row {
-      min-height: 126px;
-      display: grid;
-      grid-template-columns: 1fr 65px 1.1fr;
-      border-bottom: 1px solid #303030;
-      padding: 15px 17px 13px;
-      border-left: 2px solid transparent;
-    }
-
-    .category-row:hover {
-      background: #232323;
-      border-left-color: #008fc9;
-    }
-
-    .cat-description h2 {
-      font-size: 22px;
-      margin: 0 0 13px;
-      color: #c4c7c7;
-      font-weight: 700;
-    }
-
-    .cat-description p {
-      font-size: 17px;
-      margin: 0 0 13px;
-      color: #c2c2c2;
-    }
-
-    .square {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border-radius: 2px;
-      margin-right: 7px;
-      vertical-align: 1px;
-      background: #777;
-    }
-
-    .square.blue {
-      background: #1f8ac2;
-    }
-
-    .square.cyan2 {
-      background: #59cedd;
-    }
-
-    .square.yellow {
-      background: #e0bc51;
-    }
-
-    .square.purple {
-      background: #9276ca;
-    }
-
-    .subtags {
-      font-size: 14px;
-      color: #b8b8b8;
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .subtags span {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border-radius: 2px;
-      margin-left: 5px;
-    }
-
-    .subtags .cyan {
-      background: #65cbd5;
-    }
-
-    .subtags .pink {
-      background: #b86caa;
-    }
-
-    .topic-count {
-      font-size: 16px;
-      padding-top: 5px;
-      color: #ccc;
-      white-space: nowrap;
-    }
-
-    .topic-count strong {
-      font-size: 18px;
-    }
-
-    .latest {
-      font-size: 17px;
-      line-height: 1.52;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    .latest div {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .latest a {
-      color: #0099d7;
-      text-decoration: none;
-    }
-
-    .latest a:hover {
-      text-decoration: underline;
-    }
-
-    .latest small {
-      font-size: 14px;
-      color: #737979;
-    }
-
-    .dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      background: #0998ca;
-      border-radius: 50%;
-      margin: 0 7px;
-    }
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: transparent;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      pointer-events: none;
-    }
-
-    .topic-modal {
-      width: min(945px, calc(100vw - 40px));
-      height: 560px;
-      background: #202020;
-      border: 1px solid #3b3b3b;
-      border-radius: 10px 10px 0 0;
-      box-shadow: 0 -4px 25px #0008;
-      pointer-events: auto;
-      margin-left: -180px;
-      margin-bottom: 0;
-    }
-
-    .modal-top {
-      height: 66px;
-      position: relative;
-      padding: 28px 10px 0;
-    }
-
-    .drag {
-      position: absolute;
-      top: 9px;
-      left: 50%;
-      width: 56px;
-      height: 5px;
-      background: #888;
-      border-radius: 5px;
-      transform: translateX(-50%);
-    }
-
-    .modal-top h3 {
-      margin: 0;
-      color: #a7a7a7;
-      font-size: 18px;
-      font-weight: 400;
-    }
-
-    .window-controls {
-      position: absolute;
-      right: 10px;
-      top: 28px;
-      display: flex;
-      gap: 17px;
-    }
-
-    .window-controls button {
-      border: 0;
-      background: transparent;
-      color: #aaa;
-      font-size: 22px;
-      line-height: 1;
-      cursor: pointer;
-    }
-
-    .topic-fields {
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 10px;
-      padding: 0 10px 10px;
-    }
-
-    .topic-fields input,
-    .category-select {
-      height: 43px;
-      border: 1px solid #555;
-      background: #202020;
-      border-radius: 5px;
-      color: #bbb;
-      font-size: 17px;
-      padding: 0 13px;
-      outline: 0;
-    }
-
-    .topic-fields input::placeholder {
-      color: #707070;
-    }
-
-    .category-select {
-      text-align: left;
-      position: relative;
-    }
-
-    .category-select span {
-      position: absolute;
-      right: 12px;
-      font-size: 25px;
-      top: 5px;
-    }
-
-    .editor {
-      margin: 0 10px;
-      border: 1px solid #555;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-
-    .editor-toolbar {
-      height: 46px;
-      border-bottom: 1px solid #484848;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 0 10px;
-    }
-
-    .editor-toolbar button {
-      background: none;
-      border: 0;
-      color: #aaa;
-      font-size: 18px;
-      min-width: 20px;
-      cursor: pointer;
-    }
-
-    .editor-toolbar button:first-child {
-      background: #0b3f55;
-      color: #eee;
-      border-radius: 4px;
-      padding: 4px;
-    }
-
-    .editor-toolbar i {
-      font-family: Georgia;
-      font-size: 19px;
-    }
-
-    .editor textarea {
-      width: 100%;
-      height: 326px;
-      resize: none;
-      border: 0;
-      outline: 0;
-      background: #202020;
-      color: #ddd;
-      font-size: 16px;
-      padding: 16px 12px;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .editor textarea::placeholder {
-      color: #777;
-    }
-
-    .modal-actions {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 10px;
-    }
-
-    .create {
-      background: #078fc7;
-      border: 0;
-      border-radius: 5px;
-      color: #112027;
-      font-size: 18px;
-      padding: 10px 14px;
-      cursor: pointer;
-    }
-
-    .discard {
-      background: transparent;
-      border: 0;
-      color: #ddd;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .modal-backdrop.closed {
-      display: none;
-    }
-
-    @media (max-width: 1000px) {
       .main-nav {
-        gap: 12px;
+        display: flex;
+        gap: 25px;
+        align-items: center;
       }
 
       .main-nav a {
-        font-size: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #d9ddd9;
+        text-decoration: none;
+      }
+
+      .main-nav a:hover {
+        color: #fff;
       }
 
       .header-tools {
-        margin-left: 20px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        margin-left: 48px;
       }
 
-      .table-head,
-      .category-row {
-        grid-template-columns: 1fr 55px 1fr;
+      .search-btn {
+        width: 27px;
+        height: 27px;
+        border: 4px solid #8a918e;
+        border-radius: 50%;
+        background: transparent;
+        position: relative;
+        cursor: pointer;
       }
 
-      .topic-modal {
-        margin-left: 0;
+      .search-btn:after {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 4px;
+        background: #8a918e;
+        right: -10px;
+        bottom: -6px;
+        transform: rotate(47deg);
       }
-    }
 
-    @media (max-width: 700px) {
-      .main-nav {
-        display: none;
+      .hamburger {
+        width: 28px;
+        background: none;
+        border: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
       }
 
-      .header-tools {
-        margin-left: auto;
+      .hamburger i {
+        height: 4px;
+        background: #888f8b;
+        border-radius: 3px;
+        width: 25px;
+      }
+
+      .user-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #f1f3ed;
+        border: 2px solid #b5e6be;
+        display: grid;
+        place-items: center;
+        color: #62cb77;
+        font-size: 28px;
+        font-weight: 300;
       }
 
       .forum-page {
-        padding: 10px;
+        max-width: 1400px;
+        margin: auto;
+        padding: 20px 5px 100px;
       }
 
       .toolbar {
-        height: auto;
-        flex-wrap: wrap;
+        height: 65px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .filter-buttons {
+        display: flex;
+        gap: 10px;
+        margin-right: 10px;
+      }
+
+      .filter-buttons button {
+        height: 43px;
+        background: #202020;
+        border: 1px solid #585858;
+        color: #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        padding: 0 10px;
+      }
+
+      .filter-buttons b {
+        font-size: 30px;
+        line-height: 0;
+        vertical-align: -3px;
+        margin-left: 7px;
+        color: #aaa;
+        font-weight: 400;
       }
 
       .tabs {
-        order: 3;
-        width: 100%;
-        height: 50px;
-        gap: 18px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .tabs a {
+        color: #eee;
+        text-decoration: none;
+        font-size: 18px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 3px;
+        border-bottom: 2px solid transparent;
+      }
+
+      .tabs a.active {
+        color: #0096d6;
+        border-bottom-color: #0096d6;
       }
 
       .new-topic {
         margin-left: auto;
+        background: #0788bd;
+        border: 0;
+        color: #111d22;
+        border-radius: 5px;
+        font-size: 18px;
+        padding: 10px 16px;
+        cursor: pointer;
+      }
+
+      .new-topic:hover {
+        background: #0b9bd5;
       }
 
       .table-head {
-        display: none;
+        display: grid;
+        grid-template-columns: 1fr 65px 1.1fr;
+        border-bottom: 1px solid #303030;
+        padding: 0 17px 12px;
+        color: #ddd;
+        font-size: 15px;
+      }
+
+      .table-head span:nth-child(2),
+      .table-head span:nth-child(3) {
+        text-align: left;
       }
 
       .category-row {
-        grid-template-columns: 1fr;
-        padding: 18px 10px;
+        min-height: 126px;
+        display: grid;
+        grid-template-columns: 1fr 65px 1.1fr;
+        border-bottom: 1px solid #303030;
+        padding: 15px 17px 13px;
+        border-left: 2px solid transparent;
+      }
+
+      .category-row:hover {
+        background: #232323;
+        border-left-color: #008fc9;
+      }
+
+      .cat-description h2 {
+        font-size: 22px;
+        margin: 0 0 13px;
+        color: #c4c7c7;
+        font-weight: 700;
+      }
+
+      .cat-description p {
+        font-size: 17px;
+        margin: 0 0 13px;
+        color: #c2c2c2;
+      }
+
+      .cat-description a {
+        font-size: 22px;
+        margin: 0 0 13px;
+        color: #c4c7c7;
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      .square {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 2px;
+        margin-right: 7px;
+        vertical-align: 1px;
+        background: #777;
+      }
+
+      .square.blue {
+        background: #1f8ac2;
+      }
+
+      .square.cyan2 {
+        background: #59cedd;
+      }
+
+      .square.yellow {
+        background: #e0bc51;
+      }
+
+      .square.purple {
+        background: #9276ca;
+      }
+
+      .subtags {
+        font-size: 14px;
+        color: #b8b8b8;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .subtags span {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        margin-left: 5px;
+      }
+
+      .subtags .cyan {
+        background: #65cbd5;
+      }
+
+      .subtags .pink {
+        background: #b86caa;
       }
 
       .topic-count {
-        display: none;
+        font-size: 16px;
+        padding-top: 5px;
+        color: #ccc;
+        white-space: nowrap;
+      }
+
+      .topic-count strong {
+        font-size: 18px;
       }
 
       .latest {
-        margin-top: 12px;
+        font-size: 17px;
+        line-height: 1.52;
+        min-width: 0;
+        overflow: hidden;
       }
 
-      .topic-fields {
-        grid-template-columns: 1fr;
+      .latest div {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .latest a {
+        color: #0099d7;
+        text-decoration: none;
+      }
+
+      .latest a:hover {
+        text-decoration: underline;
+      }
+
+      .latest small {
+        font-size: 14px;
+        color: #737979;
+      }
+
+      .dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: #0998ca;
+        border-radius: 50%;
+        margin: 0 7px;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: transparent;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        pointer-events: none;
       }
 
       .topic-modal {
-        height: 600px;
-        width: 100%;
+        width: min(945px, calc(100vw - 40px));
+        height: 560px;
+        background: #202020;
+        border: 1px solid #3b3b3b;
         border-radius: 10px 10px 0 0;
+        box-shadow: 0 -4px 25px #0008;
+        pointer-events: auto;
+        margin-left: -180px;
+        margin-bottom: 0;
+      }
+
+      .modal-top {
+        height: 66px;
+        position: relative;
+        padding: 28px 10px 0;
+      }
+
+      .drag {
+        position: absolute;
+        top: 9px;
+        left: 50%;
+        width: 56px;
+        height: 5px;
+        background: #888;
+        border-radius: 5px;
+        transform: translateX(-50%);
+      }
+
+      .modal-top h3 {
+        margin: 0;
+        color: #a7a7a7;
+        font-size: 18px;
+        font-weight: 400;
+      }
+
+      .window-controls {
+        position: absolute;
+        right: 10px;
+        top: 28px;
+        display: flex;
+        gap: 17px;
+      }
+
+      .window-controls button {
+        border: 0;
+        background: transparent;
+        color: #aaa;
+        font-size: 22px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .topic-fields {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 10px;
+        padding: 0 10px 10px;
+      }
+
+      .topic-fields input,
+      .category-select {
+        height: 43px;
+        border: 1px solid #555;
+        background: #202020;
+        border-radius: 5px;
+        color: #bbb;
+        font-size: 17px;
+        padding: 0 13px;
+        outline: 0;
+      }
+
+      .topic-fields input::placeholder {
+        color: #707070;
+      }
+
+      .category-select {
+        text-align: left;
+        position: relative;
+      }
+
+      .category-select span {
+        position: absolute;
+        right: 12px;
+        font-size: 25px;
+        top: 5px;
+      }
+
+      .editor {
+        margin: 0 10px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .editor-toolbar {
+        height: 46px;
+        border-bottom: 1px solid #484848;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 0 10px;
+      }
+
+      .editor-toolbar button {
+        background: none;
+        border: 0;
+        color: #aaa;
+        font-size: 18px;
+        min-width: 20px;
+        cursor: pointer;
+      }
+
+      .editor-toolbar button:first-child {
+        background: #0b3f55;
+        color: #eee;
+        border-radius: 4px;
+        padding: 4px;
+      }
+
+      .editor-toolbar i {
+        font-family: Georgia;
+        font-size: 19px;
       }
 
       .editor textarea {
-        height: 340px;
+        width: 100%;
+        height: 326px;
+        resize: none;
+        border: 0;
+        outline: 0;
+        background: #202020;
+        color: #ddd;
+        font-size: 16px;
+        padding: 16px 12px;
+        font-family: Arial, Helvetica, sans-serif;
       }
-    }
-  </style>
-</head>
 
-<body>
-  <header class="top-header">
-    <div class="header-inner">
-      <div class="django-logo">django</div>
-      <nav class="main-nav">
-        <a href="#">PROJECT HOMEPAGE</a>
-        <a href="#">DOWNLOAD</a>
-        <a href="#">DOCUMENTATION</a>
-        <a href="#">CODE</a>
-        <a href="#">ISSUES</a>
-      </nav>
-      <div class="header-tools">
-        {% if user.is_authenticated %}
-          <span style="color:#d1fae5; font-weight:600;">{{ user.username }}</span>
-          <a href="{% url 'logout' %}" style="color:#fca5a5; text-decoration:none;">Logout</a>
-        {% else %}
-          <a href="{% url 'login' %}" style="color:#bfdbfe; text-decoration:none;">Login</a>
-          <a href="{% url 'signup' %}" style="color:#bbf7d0; text-decoration:none;">Sign up</a>
-        {% endif %}
-        <button class="search-btn" aria-label="Search"></button>
-        <button class="hamburger" aria-label="Menu">
-          <i></i><i></i><i></i>
-        </button>
-        <div class="user-circle"><span>+</span></div>
-      </div>
-    </div>
-  </header>
+      .editor textarea::placeholder {
+        color: #777;
+      }
 
-  <main class="forum-page">
-    <div class="toolbar">
-      <div class="filter-buttons">
-        <button>categories <b>›</b></button>
-        <button>tags <b>›</b></button>
-      </div>
-      <div class="tabs">
-        <a class="active" href="#">Categories</a>
-        <a href="#">Latest</a>
-        <a href="{% url 'new_announcements' %}">New ({{ topics|length }})</a>
-        <a href="#">Top</a>
-      </div>
-      <button class="new-topic" id="openTopic">&nbsp; New Topic</button>
-    </div>
+      .modal-actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 10px;
+      }
 
-    <div class="table-head">
-      <span>Category</span>
-      <span>Topics</span>
-      <span>Latest</span>
-    </div>
+      .create {
+        background: #078fc7;
+        border: 0;
+        border-radius: 5px;
+        color: #112027;
+        font-size: 18px;
+        padding: 10px 14px;
+        cursor: pointer;
+      }
 
-    <section class="category-row">
-      <div class="cat-description">
-        <h2><span class="square gray"></span> New Announcements</h2>
-        <p>Announcements and invited feedback about the forum.</p>
-        <div class="subtags">
-          <span class="cyan"></span> Releases
-          <span class="pink"></span> Pre-Releases
-        </div>
-      </div>
-      <div class="topic-count"><strong>2</strong> / month</div>
-      <div class="latest">
-        {% for topic in topics|slice:":1" %}
-        <div>
-          <a href="{% url 'topic_detail' topic.id %}">{{ topic.topic_names }}</a>
-          <small>New</small>
-        </div>
-        {% endfor %}
-        <div>
-          <a href="#">Welcome to the Django forum!</a> <small>Sep 2019</small>
-        </div>
-        <div><a href="#">Django 6.1 released</a> <small>4d</small></div>
-        <div>
-          <a href="#">Django security releases issued: 6.0.8 and 5.2.17</a>
-          <small>5d</small>
-        </div>
-      </div>
-    </section>
+      .discard {
+        background: transparent;
+        border: 0;
+        color: #ddd;
+        font-size: 18px;
+        cursor: pointer;
+      }
 
-    <section class="category-row">
-      <div class="cat-description">
-        <h2><span class="square blue"></span>Using Django</h2>
-        <p>
-          Get help with building, deploying and maintaining Django
-          applications.
-        </p>
-        <div class="subtags">
-          <span class="cyan"></span> Deployment
-          <span class="pink"></span> Templates
-        </div>
-      </div>
-      <div class="topic-count"><strong>32</strong> / month</div>
-      <div class="latest">
-        <div>
-          □
-          <a href="#">Django Session Data Is Being Lost Intermittently ...</a>
-          <span class="dot"></span>
-          <small>31m</small>
-        </div>
-        <div><a href="#">Are form fields optional?</a> <small>2d</small></div>
-        <div>
-          <a href="#">Django 6.1 and ManyToManyField</a> <small>2d</small>
-        </div>
-      </div>
-    </section>
+      .modal-backdrop.closed {
+        display: none;
+      }
 
-    <section class="category-row">
-      <div class="cat-description">
-        <h2><span class="square cyan2"></span>Internals</h2>
-        <p>
-          Discuss Django's development, core code and technical direction.
-        </p>
-      </div>
-      <div class="topic-count"><strong>15</strong> / month</div>
-      <div class="latest">
-        <div>
-          <a href="#">Django security advisories ticket #30267</a>
-          <span class="dot"></span> <small>6h</small>
-        </div>
-        <div>
-          <a href="#">Django Working Group Meeting Notes</a> <small>2d</small>
-        </div>
-        <div>
-          <a href="#">Cross-Origin Embedder Policy and Cross...</a>
-          <small>5d</small>
-        </div>
-      </div>
-    </section>
+      @media (max-width: 1000px) {
+        .main-nav {
+          gap: 12px;
+        }
 
-    <section class="category-row">
-      <div class="cat-description">
-        <h2><span class="square yellow"></span>Django Internals</h2>
-        <p>Development discussions for contributors to Django itself.</p>
-      </div>
-      <div class="topic-count"><strong>9</strong> / month</div>
-      <div class="latest">
-        <div>
-          <a href="#">New to Django? Start here!</a> <small>Dec 2024</small>
-        </div>
-        <div>
-          <a href="#">Method “QUERY” support in Django</a> <small>13d</small>
-        </div>
-        <div>
-          <a href="#">Ticket -&gt; PR -&gt; ?</a> <small>Jul 6</small>
-        </div>
-      </div>
-    </section>
+        .main-nav a {
+          font-size: 12px;
+        }
 
-    <section class="category-row">
-      <div class="cat-description">
-        <h2><span class="square purple"></span>Django Applications</h2>
-        <p>Third-party apps, reusable components and ecosystem projects.</p>
-      </div>
-      <div class="topic-count"><strong>18</strong> / month</div>
-      <div class="latest">
-        <div>
-          <a href="#">Django reusable apps — collapsible application secti...</a>
-          <small>2d</small>
+        .header-tools {
+          margin-left: 20px;
+        }
+
+        .table-head,
+        .category-row {
+          grid-template-columns: 1fr 55px 1fr;
+        }
+
+        .topic-modal {
+          margin-left: 0;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .main-nav {
+          display: none;
+        }
+
+        .header-tools {
+          margin-left: auto;
+        }
+
+        .forum-page {
+          padding: 10px;
+        }
+
+        .toolbar {
+          height: auto;
+          flex-wrap: wrap;
+        }
+
+        .tabs {
+          order: 3;
+          width: 100%;
+          height: 50px;
+          gap: 18px;
+        }
+
+        .new-topic {
+          margin-left: auto;
+        }
+
+        .table-head {
+          display: none;
+        }
+
+        .category-row {
+          grid-template-columns: 1fr;
+          padding: 18px 10px;
+        }
+
+        .topic-count {
+          display: none;
+        }
+
+        .latest {
+          margin-top: 12px;
+        }
+
+        .topic-fields {
+          grid-template-columns: 1fr;
+        }
+
+        .topic-modal {
+          height: 600px;
+          width: 100%;
+          border-radius: 10px 10px 0 0;
+        }
+
+        .editor textarea {
+          height: 340px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="top-header">
+      <div class="header-inner">
+        <div class="django-logo">django</div>
+        <nav class="main-nav">
+          <a href="#">PROJECT HOMEPAGE</a>
+          <a href="#">DOWNLOAD</a>
+          <a href="#">DOCUMENTATION</a>
+          <a href="#">CODE</a>
+          <a href="#">ISSUES</a>
+        </nav>
+        <div class="header-tools">
+          {% if user.is_authenticated %}
+          <span style="color: #d1fae5; font-weight: 600"
+            >{{ user.username }}</span
+          >
+          <a
+            href="{% url 'logout' %}"
+            style="color: #fca5a5; text-decoration: none"
+            >Logout</a
+          >
+          {% else %}
+          <a
+            href="{% url 'login' %}"
+            style="color: #bfdbfe; text-decoration: none"
+            >Login</a
+          >
+          <a
+            href="{% url 'signup' %}"
+            style="color: #bbf7d0; text-decoration: none"
+            >Sign up</a
+          >
+          {% endif %}
+          <button class="search-btn" aria-label="Search"></button>
+          <button class="hamburger" aria-label="Menu">
+            <i></i><i></i><i></i>
+          </button>
+          <div class="user-circle"><span>+</span></div>
         </div>
       </div>
-    </section>
+    </header>
 
-    <section class="category-row" style="display:block; margin-top: 20px; padding: 20px;">
-      <h2 style="margin-top: 0; color: #c4c7c7;">Latest Topics</h2>
-      <ul style="margin: 0; padding-left: 18px; color: #e6e6e6; line-height: 1.8;">
-        {% for topic in topics %}
-        <li>{{ topic.topic_names }} - {{ topic.topic_description }}</li>
-        {% empty %}
-        <li>No topics created yet.</li>
-        {% endfor %}
-      </ul>
-    </section>
-  </main>
+    <main class="forum-page">
+      <div class="toolbar">
+        <div class="filter-buttons">
+          <button>categories <b>›</b></button>
+          <button>tags <b>›</b></button>
+        </div>
+        <div class="tabs">
+          <a class="active" href="#">Categories</a>
+          <a href="#">Latest</a>
+          <a href="{% url 'new_announcements' %}">New ({{ topics|length }})</a>
+          <a href="#">Top</a>
+        </div>
+        <button class="new-topic" id="openTopic">&nbsp; New Topic</button>
+      </div>
 
-  <div class="modal-backdrop" id="modal">
-    <div class="topic-modal">
-      <form method="post" action="{% url 'first_page' %}">
-        {% csrf_token %}
-        <div class="modal-top">
-          <span class="drag"></span>
-          <h3>✎ Create topic</h3>
-          <div class="window-controls">
-            <button type="button">↗</button><button type="button">−</button><button type="button"
-              id="closeTopic">×</button>
+      <div class="table-head">
+        <span>Category</span>
+        <span>Topics</span>
+        <span>Latest</span>
+      </div>
+
+      <section class="category-row">
+        <div class="cat-description">
+          <h2>
+            <span class="square gray"></span
+            ><a href="/topics/13/">New Announcements</a>
+          </h2>
+          <p>Announcements and invited feedback about the forum.</p>
+          <div class="subtags">
+            <span class="cyan"></span> Releases
+            <span class="pink"></span> Pre-Releases
           </div>
         </div>
-        <div class="topic-fields">
-          <input type="text" name="topic_names" placeholder="What is this discussion about in one brief sentence?"
-            required />
-          <button type="button" class="category-select">Category... <span>⌄</span></button>
-        </div>
-        <div class="editor">
-          <div class="editor-toolbar">
-            <button type="button">▣ A</button><button type="button">B</button><button
-              type="button"><i>I</i></button><button type="button">Tᵀ</button> <button type="button">↗</button><button
-              type="button">❝</button><button type="button">&lt;/&gt;</button><button type="button">▧</button> <button
-              type="button">☷</button><button type="button">☺</button><button type="button">●</button>
+        <div class="topic-count"><strong>2</strong> / month</div>
+        <div class="latest">
+          {% for topic in topics|slice:":1" %}
+          <div>
+            <a href="{% url 'topic_detail' topic.id %}"
+              >{{ topic.topic_names }}</a
+            >
+            <small>New</small>
           </div>
-          <textarea name="topic_description"
-            placeholder="Type here. Use the toolbar or Markdown for formatting. Drag or paste images."></textarea>
+          {% endfor %}
+          <div>
+            <a href="#">Welcome to the Django forum!</a> <small>Sep 2019</small>
+          </div>
+          <div><a href="#">Django 6.1 released</a> <small>4d</small></div>
+          <div>
+            <a href="#">Django security releases issued: 6.0.8 and 5.2.17</a>
+            <small>5d</small>
+          </div>
         </div>
-        <div class="modal-actions">
-          <button type="submit" class="create">✎&nbsp; Create Topic</button>
-          <button type="button" class="discard" id="discardTopic">Discard</button>
+      </section>
+
+      <section class="category-row">
+        <div class="cat-description">
+          <h2><span class="square blue"></span>Using Django</h2>
+          <p>
+            Get help with building, deploying and maintaining Django
+            applications.
+          </p>
+          <div class="subtags">
+            <span class="cyan"></span> Deployment
+            <span class="pink"></span> Templates
+          </div>
         </div>
-      </form>
+        <div class="topic-count"><strong>32</strong> / month</div>
+        <div class="latest">
+          <div>
+            □
+            <a href="#">Django Session Data Is Being Lost Intermittently ...</a>
+            <span class="dot"></span>
+            <small>31m</small>
+          </div>
+          <div><a href="#">Are form fields optional?</a> <small>2d</small></div>
+          <div>
+            <a href="#">Django 6.1 and ManyToManyField</a> <small>2d</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="category-row">
+        <div class="cat-description">
+          <h2><span class="square cyan2"></span>Internals</h2>
+          <p>
+            Discuss Django's development, core code and technical direction.
+          </p>
+        </div>
+        <div class="topic-count"><strong>15</strong> / month</div>
+        <div class="latest">
+          <div>
+            <a href="#">Django security advisories ticket #30267</a>
+            <span class="dot"></span> <small>6h</small>
+          </div>
+          <div>
+            <a href="#">Django Working Group Meeting Notes</a> <small>2d</small>
+          </div>
+          <div>
+            <a href="#">Cross-Origin Embedder Policy and Cross...</a>
+            <small>5d</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="category-row">
+        <div class="cat-description">
+          <h2><span class="square yellow"></span>Django Internals</h2>
+          <p>Development discussions for contributors to Django itself.</p>
+        </div>
+        <div class="topic-count"><strong>9</strong> / month</div>
+        <div class="latest">
+          <div>
+            <a href="#">New to Django? Start here!</a> <small>Dec 2024</small>
+          </div>
+          <div>
+            <a href="#">Method “QUERY” support in Django</a> <small>13d</small>
+          </div>
+          <div>
+            <a href="#">Ticket -&gt; PR -&gt; ?</a> <small>Jul 6</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="category-row">
+        <div class="cat-description">
+          <h2><span class="square purple"></span>Django Applications</h2>
+          <p>Third-party apps, reusable components and ecosystem projects.</p>
+        </div>
+        <div class="topic-count"><strong>18</strong> / month</div>
+        <div class="latest">
+          <div>
+            <a href="#"
+              >Django reusable apps — collapsible application secti...</a
+            >
+            <small>2d</small>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="category-row"
+        style="display: block; margin-top: 20px; padding: 20px"
+      >
+        <h2 style="margin-top: 0; color: #c4c7c7">Latest Topics</h2>
+        <ul
+          style="
+            margin: 0;
+            padding-left: 18px;
+            color: #e6e6e6;
+            line-height: 1.8;
+          "
+        >
+          {% for topic in topics %}
+          <li>{{ topic.topic_names }} - {{ topic.topic_description }}</li>
+          {% empty %}
+          <li>No topics created yet.</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </main>
+
+    <div class="modal-backdrop closed" id="modal">
+      <div class="topic-modal">
+        <form method="post" action="{% url 'first_page' %}">
+          {% csrf_token %}
+          <div class="modal-top">
+            <span class="drag"></span>
+            <h3>✎ Create topic</h3>
+            <div class="window-controls">
+              <button type="button">↗</button><button type="button">−</button
+              ><button type="button" id="closeTopic">×</button>
+            </div>
+          </div>
+          <div class="topic-fields">
+            <input
+              type="text"
+              name="topic_names"
+              placeholder="What is this discussion about in one brief sentence?"
+              required
+            />
+            <button type="button" class="category-select">
+              Category... <span>⌄</span>
+            </button>
+          </div>
+          <div class="editor">
+            <div class="editor-toolbar">
+              <button type="button">▣ A</button><button type="button">B</button
+              ><button type="button"><i>I</i></button
+              ><button type="button">Tᵀ</button> <button type="button">↗</button
+              ><button type="button">❝</button
+              ><button type="button">&lt;/&gt;</button
+              ><button type="button">▧</button> <button type="button">☷</button
+              ><button type="button">☺</button><button type="button">●</button>
+            </div>
+            <textarea
+              name="topic_description"
+              placeholder="Type here. Use the toolbar or Markdown for formatting. Drag or paste images."
+            ></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="submit" class="create">✎&nbsp; Create Topic</button>
+            <button type="button" class="discard" id="discardTopic">
+              Discard
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <script>
-    const modal = document.getElementById("modal");
-    const openBtn = document.getElementById("openTopic");
-    const closeBtn = document.getElementById("closeTopic");
-    const discardBtn = document.getElementById("discardTopic");
+    <script>
+      const modal = document.getElementById("modal");
+      const openBtn = document.getElementById("openTopic");
+      const closeBtn = document.getElementById("closeTopic");
+      const discardBtn = document.getElementById("discardTopic");
 
-    function closeModal() {
-      modal.classList.add("closed");
-    }
-    function openModal() {
-      modal.classList.remove("closed");
-    }
+      function closeModal() {
+        modal.classList.add("closed");
+      }
+      function openModal() {
+        modal.classList.remove("closed");
+      }
 
-    openBtn.addEventListener("click", openModal);
-    closeBtn.addEventListener("click", closeModal);
-    discardBtn.addEventListener("click", closeModal);
-  </script>
-</body>
-
+      openBtn.addEventListener("click", openModal);
+      closeBtn.addEventListener("click", closeModal);
+      discardBtn.addEventListener("click", closeModal);
+    </script>
+  </body>
 </html>

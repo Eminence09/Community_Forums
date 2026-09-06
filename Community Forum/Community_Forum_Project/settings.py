@@ -79,6 +79,8 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+
+
 WSGI_APPLICATION = 'Community_Forum_Project.wsgi.application'
 
 
