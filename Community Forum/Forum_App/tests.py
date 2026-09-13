@@ -13,6 +13,17 @@ class TopicCreationTests(TestCase):
         self.assertContains(response, 'Django overview')
         self.assertContains(response, 'https://docs.djangoproject.com/en/5.0/topics/testing/')
 
+    def test_technology_and_news_pages_list_resources_for_public_users(self):
+        technology_response = self.client.get('/latest-technologies/')
+        news_response = self.client.get('/news/')
+
+        self.assertEqual(technology_response.status_code, 200)
+        self.assertContains(technology_response, 'Keep your toolkit current.')
+        self.assertContains(technology_response, 'Python 3.13')
+        self.assertEqual(news_response.status_code, 200)
+        self.assertContains(news_response, 'Stay close to what is changing.')
+        self.assertContains(news_response, 'Django news')
+
     def test_create_topic_and_show_it_on_home_page(self):
         user = User.objects.create_user(username='forum-user', password='test-password')
         self.client.force_login(user)

@@ -160,6 +160,62 @@ def documentation(request):
     })
 
 
+def latest_technologies(request):
+    technology_sections = [
+        {
+            'title': 'Build with what is next',
+            'description': 'Explore the tools and ideas shaping modern web development.',
+            'items': [
+                {'title': 'Python 3.13', 'description': 'See the latest language improvements, performance work, and new standard-library features.', 'url': 'https://www.python.org/downloads/release/python-3130/', 'label': 'Python'},
+                {'title': 'Django 5.2', 'description': 'Review the current long-term support release and the changes available for Django projects.', 'url': 'https://docs.djangoproject.com/en/5.2/releases/5.2/', 'label': 'Django'},
+                {'title': 'HTMX', 'description': 'Add rich interactions to server-rendered HTML without building a large client-side application.', 'url': 'https://htmx.org/docs/', 'label': 'Frontend'},
+            ],
+        },
+        {
+            'title': 'Topics worth tracking',
+            'description': 'Useful technology areas for conversations, experiments, and project planning.',
+            'items': [
+                {'title': 'AI-assisted development', 'description': 'Understand practical ways to use AI tools for research, coding, testing, and documentation.', 'url': 'https://www.python.org/ai/', 'label': 'AI'},
+                {'title': 'Web performance', 'description': 'Learn how modern browsers measure speed and how to make pages faster for real users.', 'url': 'https://web.dev/learn/performance/', 'label': 'Performance'},
+                {'title': 'Web platform updates', 'description': 'Keep up with browser capabilities and standards that make the web more powerful.', 'url': 'https://web.dev/blog/', 'label': 'Web platform'},
+            ],
+        },
+    ]
+    item_count = sum(len(section['items']) for section in technology_sections)
+    return render(request, 'latest_technologies.html', {
+        'technology_sections': technology_sections,
+        'item_count': item_count,
+    })
+
+
+def news_information(request):
+    news_sections = [
+        {
+            'title': 'Community news',
+            'description': 'Updates and conversations that matter to people building with Django and Python.',
+            'items': [
+                {'title': 'Django news', 'description': 'Read official announcements, release notes, and community updates from the Django project.', 'url': 'https://www.djangoproject.com/weblog/', 'label': 'Django'},
+                {'title': 'Python Insider', 'description': 'Follow news from the Python core team, including releases, proposals, and community highlights.', 'url': 'https://blog.python.org/', 'label': 'Python'},
+                {'title': 'Python community calendar', 'description': 'Find conferences, meetups, and other events happening across the Python community.', 'url': 'https://pycon.org/', 'label': 'Events'},
+            ],
+        },
+        {
+            'title': 'The wider web',
+            'description': 'Reliable places to follow changes in the tools and standards behind modern applications.',
+            'items': [
+                {'title': 'MDN web platform news', 'description': 'Stay current with browser APIs, CSS, JavaScript, and web standards.', 'url': 'https://developer.mozilla.org/en-US/blog/', 'label': 'Web platform'},
+                {'title': 'GitHub changelog', 'description': 'Track new features and improvements across the tools many developers use every day.', 'url': 'https://github.blog/changelog/', 'label': 'Developer tools'},
+                {'title': 'Open-source news', 'description': 'Discover project releases, maintainer perspectives, and important open-source stories.', 'url': 'https://opensource.googleblog.com/', 'label': 'Open source'},
+            ],
+        },
+    ]
+    item_count = sum(len(section['items']) for section in news_sections)
+    return render(request, 'news_information.html', {
+        'news_sections': news_sections,
+        'item_count': item_count,
+    })
+
+
 @login_required(login_url='login')
 def first_page(request):
     import platform

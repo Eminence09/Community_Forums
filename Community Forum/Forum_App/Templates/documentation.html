@@ -65,10 +65,9 @@
         <div class="django-logo">django</div>
         <nav class="main-nav" aria-label="Main navigation">
           <a href="{% url 'first_page' %}">PROJECT HOMEPAGE</a>
-          <a href="#">DOWNLOAD</a>
+          <a href="{% url 'latest_technologies' %}">LATEST TECHNOLOGIES</a>
           <a class="active" href="{% url 'documentation' %}">DOCUMENTATION</a>
-          <a href="#">CODE</a>
-          <a href="#">ISSUES</a>
+          <a href="{% url 'news_information' %}">NEWS</a>
         </nav>
         <div class="account">
           {% if user.is_authenticated %}<span class="user-name">{{ user.username }}</span><a href="{% url 'logout' %}">Logout</a>{% else %}<a href="{% url 'login' %}">Login</a>{% endif %}

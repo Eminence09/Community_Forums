@@ -619,10 +619,9 @@
         <div class="django-logo">CommunityForDevs</div>
         <nav class="main-nav">
           <a href="{% url 'project_homepage' %}">PROJECT HOMEPAGE</a>
-          <a href="#">DOWNLOAD</a>
+          <a href="{% url 'latest_technologies' %}">LATEST TECHNOLOGIES</a>
           <a href="{% url 'documentation' %}">DOCUMENTATION</a>
-          <a href="#">CODE</a>
-          <a href="#">ISSUES</a>
+          <a href="{% url 'news_information' %}">NEWS</a>
         </nav>
         <div class="header-tools">
           {% if user.is_authenticated %}

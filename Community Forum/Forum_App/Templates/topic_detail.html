@@ -228,9 +228,8 @@
       <div class="header-inner">
         <div class="django-logo">CommunityForDevs</div>
         <nav class="main-nav">
-          <a href="#">PROJECT HOMEPAGE</a><a href="#">DOWNLOAD</a
-          ><a href="{% url 'documentation' %}">DOCUMENTATION</a><a href="#">CODE</a
-          ><a href="#">ISSUES</a>
+          <a href="{% url 'first_page' %}">PROJECT HOMEPAGE</a><a href="{% url 'latest_technologies' %}">LATEST TECHNOLOGIES</a
+          ><a href="{% url 'documentation' %}">DOCUMENTATION</a><a href="{% url 'news_information' %}">NEWS</a>
         </nav>
         <div class="account">
           <span class="user-name">{{ user.username }}</span
