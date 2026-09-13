@@ -5,6 +5,14 @@ from .models import TopicReply, topic_info
 
 
 class TopicCreationTests(TestCase):
+    def test_documentation_page_lists_resources_for_public_users(self):
+        response = self.client.get('/documentation/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Find the documentation for your next fix.')
+        self.assertContains(response, 'Django overview')
+        self.assertContains(response, 'https://docs.djangoproject.com/en/5.0/topics/testing/')
+
     def test_create_topic_and_show_it_on_home_page(self):
         user = User.objects.create_user(username='forum-user', password='test-password')
         self.client.force_login(user)

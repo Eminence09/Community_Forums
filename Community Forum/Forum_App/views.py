@@ -48,6 +48,118 @@ def logout_view(request):
     return redirect('login')
 
 
+def documentation(request):
+    documentation_sections = [
+        {
+            'title': 'Start here',
+            'description': 'Get a project running and understand the pieces that make up a Django application.',
+            'documents': [
+                {
+                    'title': 'Django overview',
+                    'description': 'A high-level introduction to Django and its core concepts.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/intro/overview/',
+                    'label': 'Beginner',
+                },
+                {
+                    'title': 'Writing your first Django app',
+                    'description': 'Build a small application from models through views and templates.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/intro/tutorial01/',
+                    'label': 'Tutorial',
+                },
+                {
+                    'title': 'Django installation guide',
+                    'description': 'Install Django and choose the right setup for your operating system.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/topics/install/',
+                    'label': 'Setup',
+                },
+            ],
+        },
+        {
+            'title': 'Build with Django',
+            'description': 'Find the reference material for the parts you use every day.',
+            'documents': [
+                {
+                    'title': 'Models and databases',
+                    'description': 'Define data models, relationships, migrations, and database queries.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/topics/db/',
+                    'label': 'Data',
+                },
+                {
+                    'title': 'Views and URL routing',
+                    'description': 'Connect URLs to views and return the right response for each request.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/topics/http/urls/',
+                    'label': 'Web',
+                },
+                {
+                    'title': 'Templates',
+                    'description': 'Render dynamic pages with Django\'s template language.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/topics/templates/',
+                    'label': 'Frontend',
+                },
+                {
+                    'title': 'Forms',
+                    'description': 'Create, validate, and process forms safely.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/topics/forms/',
+                    'label': 'Forms',
+                },
+            ],
+        },
+        {
+            'title': 'Solve common problems',
+            'description': 'Practical references for authentication, files, and testing.',
+            'documents': [
+                {
+                    'title': 'Authentication and authorization',
+                    'description': 'Work with users, sessions, login, logout, and permissions.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/topics/auth/',
+                    'label': 'Users',
+                },
+                {
+                    'title': 'Testing in Django',
+                    'description': 'Write tests for views, models, forms, and complete workflows.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/topics/testing/',
+                    'label': 'Testing',
+                },
+                {
+                    'title': 'Static files',
+                    'description': 'Manage CSS, JavaScript, images, and collected assets.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/howto/static-files/',
+                    'label': 'Assets',
+                },
+            ],
+        },
+        {
+            'title': 'Ship with confidence',
+            'description': 'Prepare a project for production and keep it secure.',
+            'documents': [
+                {
+                    'title': 'Deployment checklist',
+                    'description': 'Review security, performance, and configuration before launch.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/',
+                    'label': 'Production',
+                },
+                {
+                    'title': 'Security in Django',
+                    'description': 'Learn how Django helps protect applications and where to take care.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/topics/security/',
+                    'label': 'Security',
+                },
+                {
+                    'title': 'Django API reference',
+                    'description': 'Look up the complete reference for Django\'s built-in APIs.',
+                    'url': 'https://docs.djangoproject.com/en/5.0/ref/',
+                    'label': 'Reference',
+                },
+            ],
+        },
+    ]
+    document_count = sum(len(section['documents']) for section in documentation_sections)
+    return render(request, 'documentation.html', {
+        'documentation_sections': documentation_sections,
+        'document_count': document_count,
+    })
+
+
 @login_required(login_url='login')
 def first_page(request):
     import platform
