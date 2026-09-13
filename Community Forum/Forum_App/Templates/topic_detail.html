@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ topic.topic_names }} | Django Forum</title>
+    <title>{{ topic.topic_names }} | CommunityForDevs</title>
     <style>
       * {
         box-sizing: border-box;
@@ -226,7 +226,7 @@
   <body>
     <header class="top-header">
       <div class="header-inner">
-        <div class="django-logo">django</div>
+        <div class="django-logo">CommunityForDevs</div>
         <nav class="main-nav">
           <a href="#">PROJECT HOMEPAGE</a><a href="#">DOWNLOAD</a
           ><a href="#">DOCUMENTATION</a><a href="#">CODE</a
@@ -242,7 +242,7 @@
     <main class="page">
       <section class="topic-head">
         <a class="back" href="{% url 'new_announcements' %}"
-          >&lt; New Announcements</a
+          > New Announcements</a
         >
         <h1>{{ topic.topic_names }}</h1>
         <div class="category">Announcements</div>

@@ -14,3 +14,9 @@ postgresql credentials:
 
 DB_USER=postgres
 DB_PASSWORD="yashscommunity"
+
+
+SupaBase credentials:
+
+Project name: Community Forum
+Database Password: @pzcNzCz!n4#WmA

@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 
 class topic_info(models.Model):
@@ -6,6 +7,7 @@ class topic_info(models.Model):
     system_name = models.CharField(max_length=255, default='')
     topic_names = models.CharField(max_length=1000)
     topic_description = models.CharField(max_length=1000)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.username or 'Unknown user'} - {self.system_name or 'Unknown system'}"

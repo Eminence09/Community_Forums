@@ -183,6 +183,7 @@
         border-bottom-color: #0096d6;
       }
 
+
       .new-topic {
         margin-left: auto;
         background: #0788bd;
@@ -607,6 +608,7 @@
         .editor textarea {
           height: 340px;
         }
+
       }
     </style>
   </head>
@@ -614,9 +616,9 @@
   <body>
     <header class="top-header">
       <div class="header-inner">
-        <div class="django-logo">django</div>
+        <div class="django-logo">CommunityForDevs</div>
         <nav class="main-nav">
-          <a href="#">PROJECT HOMEPAGE</a>
+          <a href="{% url 'project_homepage' %}">PROJECT HOMEPAGE</a>
           <a href="#">DOWNLOAD</a>
           <a href="#">DOCUMENTATION</a>
           <a href="#">CODE</a>
@@ -645,6 +647,7 @@
           >
           {% endif %}
           <button class="search-btn" aria-label="Search"></button>
+          <input id="search-topic" type="text" placeholder="Search your problem across the world..." style="display: contents;" onclick="">
           <button class="hamburger" aria-label="Menu">
             <i></i><i></i><i></i>
           </button>
@@ -693,7 +696,7 @@
             <a href="{% url 'topic_detail' topic.id %}"
               >{{ topic.topic_names }}</a
             >
-            <small>New</small>
+            <small>Created {{ topic.created_at|date:"M j, Y, g:i a" }}</small>
           </div>
           {% endfor %}
           <div>
@@ -806,7 +809,7 @@
           "
         >
           {% for topic in topics %}
-          <li>{{ topic.topic_names }} - {{ topic.topic_description }}</li>
+          <li>{{ topic.topic_names }} - {{ topic.topic_description }} {{ uploaded_datetime }}</li>
           {% empty %}
           <li>No topics created yet.</li>
           {% endfor %}
@@ -867,6 +870,7 @@
       const openBtn = document.getElementById("openTopic");
       const closeBtn = document.getElementById("closeTopic");
       const discardBtn = document.getElementById("discardTopic");
+      const search_topic = document.getElementById("search-topic");
 
       function closeModal() {
         modal.classList.add("closed");
@@ -874,7 +878,8 @@
       function openModal() {
         modal.classList.remove("closed");
       }
-
+      
+        
       openBtn.addEventListener("click", openModal);
       closeBtn.addEventListener("click", closeModal);
       discardBtn.addEventListener("click", closeModal);

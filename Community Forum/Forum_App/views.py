@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import SignUpForm
 from .models import TopicReply, topic_info
-
+import datetime
 
 def signup_view(request):
     if request.user.is_authenticated:
@@ -60,6 +60,7 @@ def first_page(request):
                 topic_names=topic_name,
                 topic_description=topic_description,
                 username=request.user.username,
+                # uploaded_datetime = datetime.datetime.now(),
                 # system_name=request.META.get('HTTP_HOST', 'local')
                 system_name= platform.node()
             )

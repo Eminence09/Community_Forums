@@ -1,4 +1,12 @@
+import psycopg2
+from dotenv import load_dotenv
 import os
-import platform
 
-print(platform.platform())
+# Load environment variables from .env
+load_dotenv()
+
+# Fetch variables
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Connect to the database
+connection = psycopg2.connect(DATABASE_URL)

@@ -213,7 +213,7 @@
       <div class="header-inner">
         <div class="django-logo">django</div>
         <nav class="main-nav">
-          <a href="#">PROJECT HOMEPAGE</a>
+          <a href="{% url 'first_page' %}">PROJECT HOMEPAGE</a>
           <a href="#">DOWNLOAD</a>
           <a href="#">DOCUMENTATION</a>
           <a href="#">CODE</a>
@@ -249,8 +249,10 @@
             >
           </h2>
           <div class="post-meta">
-            Posted by {{ topic.username|default:"Unknown user" }} {% if
-            topic.system_name %} from {{ topic.system_name }}{% endif %}
+            Posted by {{ topic.username|default:"Unknown user" }}
+            {% if topic.system_name %} from {{ topic.system_name }} 
+            {% endif %}
+            on {{ topic.created_at|date:"M j, Y, g:i a" }}
           </div>
           <p class="post-body">
             {{ topic.topic_description|default:"No post content was added." }}
