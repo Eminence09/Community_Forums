@@ -1,4 +1,5 @@
-from django.test import TestCase
+from django.core import mail
+from django.test import TestCase, override_settings
 from django.contrib.auth.models import User
 
 from .models import TopicReply, topic_info
@@ -87,3 +88,13 @@ class TopicCreationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(TopicReply.objects.filter(topic=topic, username='reply-user').exists())
         self.assertContains(response, 'This is a public reply.')
+
+    @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+    def test_password_reset_email_is_sent_for_registered_user(self):
+        User.objects.create_user(username='reset-user', email='reset@example.com', password='test-password')
+
+        response = self.client.post('/password_reset/', {'email': 'reset@example.com'})
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('reset@example.com', mail.outbox[0].to)

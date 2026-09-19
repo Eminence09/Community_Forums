@@ -121,6 +121,10 @@ X_FRAME_OPTIONS = 'ALLOWALL'
 
 STATIC_URL = 'static/'
 
+# Email settings for password reset flow.
+# In development, the reset link is printed to the console instead of sending mail.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
