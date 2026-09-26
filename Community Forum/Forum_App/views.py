@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import SignUpForm
 from .models import TopicReply, topic_info
-import datetime
+
 
 def signup_view(request):
     if request.user.is_authenticated:
